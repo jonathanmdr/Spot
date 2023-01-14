@@ -1,0 +1,22 @@
+spring:
+  cloud:
+    stream:
+      function:
+        definition: fizzBuzzProducer;fizzBuzzProcessor;fizzBuzzConsumer
+
+      bindings:
+        fizzBuzzProducer-out-0:
+          destination: numbers-topic
+        fizzBuzzProcessor-in-0:
+          destination: numbers-topic
+          group: spot
+        fizzBuzzProcessor-out-0:
+          destination: fizz-buzz-topic
+        fizzBuzzConsumer-in-0:
+          destination: fizz-buzz-topic
+          group: spot
+
+      kafka:
+        binder:
+          brokers: localhost:9292
+          auto-create-topics: true
