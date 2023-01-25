@@ -1,9 +1,8 @@
-package com.cloud.stream.spot.infrastructure.api;
+package com.cloud.stream.spot.infrastructure.order.api;
 
-import com.cloud.stream.spot.application.order.CreateNewOrderUseCase;
-import com.cloud.stream.spot.application.order.DefaultCreateNewOrderUseCase;
-import com.cloud.stream.spot.application.order.command.CreateNewOrderCommand;
-import com.cloud.stream.spot.infrastructure.api.in.OrderInput;
+import com.cloud.stream.spot.application.usecase.order.create.CreateNewOrderUseCase;
+import com.cloud.stream.spot.application.usecase.order.create.comand.CreateNewOrderCommand;
+import com.cloud.stream.spot.infrastructure.order.api.in.OrderInput;
 import org.springframework.web.bind.annotation.*;
 
 import static org.springframework.http.HttpStatus.ACCEPTED;

@@ -1,7 +1,7 @@
-package com.cloud.stream.spot.application.order;
+package com.cloud.stream.spot.application.usecase.order.create;
 
-import com.cloud.stream.spot.application.order.command.CreateNewOrderCommand;
-import com.cloud.stream.spot.domain.Order;
+import com.cloud.stream.spot.application.usecase.order.create.comand.CreateNewOrderCommand;
+import com.cloud.stream.spot.domain.order.Order;
 import com.cloud.stream.spot.domain.OrderGateway;
 
 public class DefaultCreateNewOrderUseCase extends CreateNewOrderUseCase {
@@ -14,11 +14,8 @@ public class DefaultCreateNewOrderUseCase extends CreateNewOrderUseCase {
 
     @Override
     public void execute(final CreateNewOrderCommand command) {
-        final Order orderReceived = Order.createNewOrderWith(
-            command.customerId(),
-            command.value()
-        );
-        gateway.createNewOrder(orderReceived);
+        final Order orderReceived = command.toOrder();
+        gateway.create(orderReceived);
     }
 
 }

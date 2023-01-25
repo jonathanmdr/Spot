@@ -1,4 +1,4 @@
-package com.cloud.stream.spot.infrastructure.api.in;
+package com.cloud.stream.spot.infrastructure.order.api.in;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

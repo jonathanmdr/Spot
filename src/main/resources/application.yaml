@@ -6,12 +6,17 @@ server:
 spring:
   cloud:
     stream:
-#      function:
-#        definition:
+      function:
+        definition: orderCreatedListener
 
       bindings:
-        newCreatedProducer-out-0:
+        orderCreatedProducer-out-0:
           destination: order-created
+        orderCreatedListener-in-0:
+          destination: order-created
+          group: spot
+        orderCreatedListener-out-0:
+          destination: order-processed
 
       kafka:
         binder:

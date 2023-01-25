@@ -1,4 +1,4 @@
-package com.cloud.stream.spot.domain;
+package com.cloud.stream.spot.domain.order;
 
 public enum OrderStatus {
     CREATED,
