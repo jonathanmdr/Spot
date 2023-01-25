@@ -1,20 +1,17 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /spot
+
 spring:
   cloud:
     stream:
-      function:
-        definition: fizzBuzzProducer;fizzBuzzProcessor;fizzBuzzConsumer
+#      function:
+#        definition:
 
       bindings:
-        fizzBuzzProducer-out-0:
-          destination: numbers-topic
-        fizzBuzzProcessor-in-0:
-          destination: numbers-topic
-          group: spot
-        fizzBuzzProcessor-out-0:
-          destination: fizz-buzz-topic
-        fizzBuzzConsumer-in-0:
-          destination: fizz-buzz-topic
-          group: spot
+        newCreatedProducer-out-0:
+          destination: order-created
 
       kafka:
         binder:
