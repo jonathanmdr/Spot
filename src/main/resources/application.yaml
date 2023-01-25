@@ -7,7 +7,7 @@ spring:
   cloud:
     stream:
       function:
-        definition: orderCreatedListener
+        definition: orderCreatedListener;orderProcessedListener
 
       bindings:
         orderCreatedProducer-out-0:
@@ -17,6 +17,9 @@ spring:
           group: spot
         orderCreatedListener-out-0:
           destination: order-processed
+        orderProcessedListener-in-0:
+          destination: order-processed
+          group: spot
 
       kafka:
         binder:
