@@ -1,2 +1,4 @@
 # Spot
-Spring Cloud Stream FizzBuzz example with functional programming and Kafka
+This project is an example of how to use the "Spring Cloud Stream" with Java functional programming.
+
+This example uses the message broker Kafka. 
