@@ -1,4 +1,4 @@
-package com.cloud.stream.spot.application.usecase.order.create.comand;
+package com.cloud.stream.spot.application.usecase.order.create;
 
 import com.cloud.stream.spot.domain.order.Order;
 

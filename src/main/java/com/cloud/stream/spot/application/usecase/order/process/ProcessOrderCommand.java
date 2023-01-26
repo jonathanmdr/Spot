@@ -1,4 +1,4 @@
-package com.cloud.stream.spot.application.usecase.order.process.command;
+package com.cloud.stream.spot.application.usecase.order.process;
 
 import com.cloud.stream.spot.domain.order.Order;
 import com.cloud.stream.spot.domain.order.OrderStatus;

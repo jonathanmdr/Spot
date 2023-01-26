@@ -1,6 +1,6 @@
 package com.cloud.stream.spot.infrastructure.order.listener;
 
-import com.cloud.stream.spot.domain.order.event.OrderProcessedEvent;
+import com.cloud.stream.spot.infrastructure.order.event.OrderProcessedEvent;
 import com.cloud.stream.spot.infrastructure.configuration.json.Json;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -17,8 +17,8 @@ public class OrderBeanConfiguration {
     }
 
     @Bean
-    public ProcessOrderUseCase processOrderUseCase(final OrderGateway orderGateway) {
-        return new DefaultProcessOrderUseCase(orderGateway);
+    public ProcessOrderUseCase processOrderUseCase() {
+        return new DefaultProcessOrderUseCase();
     }
 
 }

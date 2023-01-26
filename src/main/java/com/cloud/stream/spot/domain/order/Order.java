@@ -33,7 +33,8 @@ public class Order {
         final UUID orderId,
         final UUID customerId,
         final BigDecimal value,
-        final OrderStatus status) {
+        final OrderStatus status
+    ) {
 
         if (!OrderStatus.CREATED.equals(status)) {
             throw new DomainException(

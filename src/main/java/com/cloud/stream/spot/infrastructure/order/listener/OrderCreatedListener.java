@@ -1,9 +1,10 @@
 package com.cloud.stream.spot.infrastructure.order.listener;
 
+import com.cloud.stream.spot.application.usecase.order.process.ProcessOrderCommand;
+import com.cloud.stream.spot.application.usecase.order.process.ProcessOrderOutput;
 import com.cloud.stream.spot.application.usecase.order.process.ProcessOrderUseCase;
-import com.cloud.stream.spot.application.usecase.order.process.command.ProcessOrderCommand;
-import com.cloud.stream.spot.domain.order.event.OrderCreatedEvent;
-import com.cloud.stream.spot.domain.order.event.OrderProcessedEvent;
+import com.cloud.stream.spot.infrastructure.order.event.OrderCreatedEvent;
+import com.cloud.stream.spot.infrastructure.order.event.OrderProcessedEvent;
 import org.springframework.stereotype.Component;
 
 import java.util.function.Function;
@@ -26,7 +27,14 @@ public class OrderCreatedListener implements Function<OrderCreatedEvent, OrderPr
             order.status()
         );
 
-        return useCase.execute(command);
+        final ProcessOrderOutput output = this.useCase.execute(command);
+
+        return new OrderProcessedEvent(
+            output.orderId(),
+            output.customerId(),
+            output.value(),
+            output.status()
+        );
     }
 
 }

@@ -1,7 +1,7 @@
 package com.cloud.stream.spot.infrastructure.order.api;
 
 import com.cloud.stream.spot.application.usecase.order.create.CreateNewOrderUseCase;
-import com.cloud.stream.spot.application.usecase.order.create.comand.CreateNewOrderCommand;
+import com.cloud.stream.spot.application.usecase.order.create.CreateNewOrderCommand;
 import com.cloud.stream.spot.infrastructure.order.api.in.OrderInput;
 import org.springframework.web.bind.annotation.*;
 

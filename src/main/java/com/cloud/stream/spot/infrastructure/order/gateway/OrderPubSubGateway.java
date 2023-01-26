@@ -2,8 +2,7 @@ package com.cloud.stream.spot.infrastructure.order.gateway;
 
 import com.cloud.stream.spot.domain.OrderGateway;
 import com.cloud.stream.spot.domain.order.Order;
-import com.cloud.stream.spot.domain.order.event.OrderCreatedEvent;
-import com.cloud.stream.spot.domain.order.event.OrderProcessedEvent;
+import com.cloud.stream.spot.infrastructure.order.event.OrderCreatedEvent;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.stereotype.Component;
 
@@ -28,16 +27,6 @@ public class OrderPubSubGateway implements OrderGateway {
         );
 
         bridge.send(ORDER_CREATED, event);
-    }
-
-    @Override
-    public OrderProcessedEvent process(final Order order) {
-        return new OrderProcessedEvent(
-            order.getOrderId(),
-            order.getCustomerId(),
-            order.getValue(),
-            order.getStatus()
-        );
     }
 
 }
