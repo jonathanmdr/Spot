@@ -6,14 +6,14 @@ import com.cloud.stream.spot.infrastructure.order.event.OrderCreatedEvent;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.stereotype.Component;
 
-import static com.cloud.stream.spot.infrastructure.configuration.streambinding.OrderBindingProperties.ORDER_CREATED;
+import static com.cloud.stream.spot.infrastructure.configuration.streambinding.OrderBinding.ORDER_CREATED;
 
 @Component
 public class OrderPubSubGateway implements OrderGateway {
 
     private final StreamBridge bridge;
 
-    public OrderPubSubGateway(StreamBridge bridge) {
+    public OrderPubSubGateway(final StreamBridge bridge) {
         this.bridge = bridge;
     }
 
@@ -26,7 +26,7 @@ public class OrderPubSubGateway implements OrderGateway {
             order.getStatus()
         );
 
-        bridge.send(ORDER_CREATED, event);
+        bridge.send(ORDER_CREATED.channel(), event);
     }
 
 }

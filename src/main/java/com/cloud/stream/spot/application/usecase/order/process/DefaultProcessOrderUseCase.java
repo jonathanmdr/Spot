@@ -2,7 +2,7 @@ package com.cloud.stream.spot.application.usecase.order.process;
 
 import com.cloud.stream.spot.domain.order.Order;
 
-public class DefaultProcessOrderUseCase extends ProcessOrderUseCase {
+public final class DefaultProcessOrderUseCase extends ProcessOrderUseCase {
 
     @Override
     public ProcessOrderOutput execute(final ProcessOrderCommand command) {

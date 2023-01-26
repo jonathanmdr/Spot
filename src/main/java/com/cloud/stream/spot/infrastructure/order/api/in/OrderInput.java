@@ -8,14 +8,4 @@ import java.util.UUID;
 public record OrderInput(
     @JsonProperty("customer_id") UUID customerId,
     @JsonProperty("value") BigDecimal value
-) {
-
-    @Override
-    public String toString() {
-        return "OrderInput{" +
-                "customerId=" + customerId +
-                ", value=" + value +
-                '}';
-    }
-
-}
+) { }

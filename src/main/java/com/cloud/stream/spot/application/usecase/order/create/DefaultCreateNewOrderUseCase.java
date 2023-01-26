@@ -3,11 +3,11 @@ package com.cloud.stream.spot.application.usecase.order.create;
 import com.cloud.stream.spot.domain.order.Order;
 import com.cloud.stream.spot.domain.OrderGateway;
 
-public class DefaultCreateNewOrderUseCase extends CreateNewOrderUseCase {
+public final class DefaultCreateNewOrderUseCase extends CreateNewOrderUseCase {
 
     private final OrderGateway gateway;
 
-    public DefaultCreateNewOrderUseCase(OrderGateway gateway) {
+    public DefaultCreateNewOrderUseCase(final OrderGateway gateway) {
         this.gateway = gateway;
     }
 

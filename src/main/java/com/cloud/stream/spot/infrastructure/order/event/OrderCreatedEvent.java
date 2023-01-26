@@ -11,5 +11,4 @@ public record OrderCreatedEvent(
         @JsonProperty("customer_id") UUID customerId,
         @JsonProperty("value") BigDecimal value,
         @JsonProperty("status") OrderStatus status
-) {
-}
+) { }
