@@ -30,7 +30,7 @@ public class OrderController {
             input.value()
         );
 
-        useCase.execute(command);
+        this.useCase.execute(command);
     }
 
 }

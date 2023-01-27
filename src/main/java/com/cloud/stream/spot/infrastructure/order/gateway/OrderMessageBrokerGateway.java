@@ -2,19 +2,19 @@ package com.cloud.stream.spot.infrastructure.order.gateway;
 
 import com.cloud.stream.spot.domain.OrderGateway;
 import com.cloud.stream.spot.domain.order.Order;
+import com.cloud.stream.spot.infrastructure.configuration.stream.producer.StreamProducer;
 import com.cloud.stream.spot.infrastructure.order.event.OrderCreatedEvent;
-import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.stereotype.Component;
 
-import static com.cloud.stream.spot.infrastructure.configuration.streambinding.OrderBinding.ORDER_CREATED;
+import static com.cloud.stream.spot.infrastructure.configuration.stream.bindings.OrderBinding.ORDER_CREATED;
 
 @Component
-public class OrderPubSubGateway implements OrderGateway {
+public class OrderMessageBrokerGateway implements OrderGateway {
 
-    private final StreamBridge bridge;
+    private final StreamProducer producer;
 
-    public OrderPubSubGateway(final StreamBridge bridge) {
-        this.bridge = bridge;
+    public OrderMessageBrokerGateway(final StreamProducer producer) {
+        this.producer = producer;
     }
 
     @Override
@@ -26,7 +26,7 @@ public class OrderPubSubGateway implements OrderGateway {
             order.getStatus()
         );
 
-        bridge.send(ORDER_CREATED.channel(), event);
+        this.producer.send(ORDER_CREATED.channel(), event);
     }
 
 }
