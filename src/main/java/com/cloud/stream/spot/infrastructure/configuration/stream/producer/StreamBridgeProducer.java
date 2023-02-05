@@ -8,7 +8,7 @@ public class StreamBridgeProducer implements StreamProducer {
 
     private final StreamBridge streamBridge;
 
-    public StreamBridgeProducer(StreamBridge streamBridge) {
+    public StreamBridgeProducer(final StreamBridge streamBridge) {
         this.streamBridge = streamBridge;
     }
 

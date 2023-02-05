@@ -24,7 +24,7 @@ public class OrderController {
 
     @PostMapping
     @ResponseStatus(ACCEPTED)
-    public void create(@RequestBody OrderInput input) {
+    public void create(@RequestBody final OrderInput input) {
         final CreateNewOrderCommand command = new CreateNewOrderCommand(
             input.customerId(),
             input.value()
