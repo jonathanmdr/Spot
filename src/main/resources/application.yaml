@@ -25,3 +25,16 @@ spring:
         binder:
           brokers: localhost:9292
           auto-create-topics: true
+        bindings:
+          orderCreatedListener-in-0:
+            consumer:
+              enableDlq: true
+              dlqName: order-created-dlq
+              autoCommitOnError: true
+              autoCommitOffset: true
+          orderProcessedListener-in-0:
+            consumer:
+              enableDlq: true
+              dlqName: order-processed-dlq
+              autoCommitOnError: true
+              autoCommitOffset: true
