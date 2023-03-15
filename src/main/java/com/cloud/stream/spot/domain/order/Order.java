@@ -3,7 +3,6 @@ package com.cloud.stream.spot.domain.order;
 import com.cloud.stream.spot.domain.exception.DomainException;
 
 import java.math.BigDecimal;
-import java.util.Random;
 import java.util.UUID;
 
 public class Order {
@@ -50,8 +49,9 @@ public class Order {
         );
     }
 
-    public boolean validate() {
-        return new Random().nextBoolean();
+    public boolean isValid() {
+        final BigDecimal maxValueAccepted = BigDecimal.valueOf(500);
+        return maxValueAccepted.compareTo(this.value) >= 0;
     }
 
     public Order approve() {

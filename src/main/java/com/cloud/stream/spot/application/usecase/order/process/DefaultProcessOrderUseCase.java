@@ -8,7 +8,7 @@ public final class DefaultProcessOrderUseCase extends ProcessOrderUseCase {
     public ProcessOrderOutput execute(final ProcessOrderCommand command) {
         final Order orderReceived = command.toOrder();
 
-        final Order order = orderReceived.validate() ? orderReceived.approve() : orderReceived.reject();
+        final Order order = orderReceived.isValid() ? orderReceived.approve() : orderReceived.reject();
 
         return new ProcessOrderOutput(
             order.getOrderId(),

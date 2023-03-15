@@ -28,6 +28,9 @@ docker-compose down --remove-orphans --volumes
 ---
 
 #### Request example:
+> The order with a value less than or equal to 500.00 is valid and returns `APPROVED`.
+> 
+> The order with a value greater than to 500.00 is invalid and returns `REJECTED`.
 ```shell
 curl --location --request POST 'http://localhost:8080/spot/orders' \
 --header 'Content-Type: application/json' \
