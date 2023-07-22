@@ -5,10 +5,9 @@ server:
 
 spring:
   cloud:
+    function:
+      definition: orderCreatedListener;orderProcessedListener
     stream:
-      function:
-        definition: orderCreatedListener;orderProcessedListener
-
       bindings:
         orderCreatedProducer-out-0:
           destination: order-created
@@ -20,10 +19,9 @@ spring:
         orderProcessedListener-in-0:
           destination: order-processed
           group: spot
-
       kafka:
         binder:
-          brokers: localhost:9292
+          brokers: localhost:9092
           auto-create-topics: true
         bindings:
           orderCreatedListener-in-0:

@@ -13,6 +13,7 @@ import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import java.util.concurrent.Callable;
 
 public enum Json {
+
     INSTANCE;
 
     public static ObjectMapper mapper() {
