@@ -1,6 +1,6 @@
 package com.cloud.stream.spot.infrastructure.order.listener;
 
-import com.cloud.stream.spot.KafkaTest;
+import com.cloud.stream.spot.KafkaIntegrationTest;
 import com.cloud.stream.spot.domain.OrderGateway;
 import com.cloud.stream.spot.domain.order.Order;
 import com.cloud.stream.spot.domain.order.OrderStatus;
@@ -15,7 +15,7 @@ import java.util.UUID;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.verify;
 
-@KafkaTest
+@KafkaIntegrationTest
 class OrderCreatedListenerTest {
 
     @Autowired

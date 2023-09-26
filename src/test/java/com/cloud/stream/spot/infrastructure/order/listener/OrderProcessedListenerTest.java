@@ -1,6 +1,6 @@
 package com.cloud.stream.spot.infrastructure.order.listener;
 
-import com.cloud.stream.spot.KafkaTest;
+import com.cloud.stream.spot.KafkaIntegrationTest;
 import com.cloud.stream.spot.domain.order.OrderStatus;
 import com.cloud.stream.spot.infrastructure.configuration.json.Json;
 import com.cloud.stream.spot.infrastructure.order.event.OrderProcessedEvent;
@@ -21,7 +21,7 @@ import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.verify;
 import static org.springframework.boot.logging.LogLevel.INFO;
 
-@KafkaTest
+@KafkaIntegrationTest
 @ExtendWith(OutputCaptureExtension.class)
 class OrderProcessedListenerTest {
 
