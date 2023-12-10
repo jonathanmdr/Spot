@@ -16,7 +16,7 @@ import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.verify;
 
 @KafkaIntegrationTest
-class OrderCreatedListenerTest {
+class OrderCreatedListenerIntegrationTest {
 
     @Autowired
     private OrderGateway orderGateway;

@@ -28,6 +28,10 @@ public enum Json {
         return invoke(() -> INSTANCE.objectMapper.readValue(json, clazz));
     }
 
+    public static <T> T readValue(final byte[] json, final Class<T> clazz) {
+        return invoke(() -> INSTANCE.objectMapper.readValue(json, clazz));
+    }
+
     private final ObjectMapper objectMapper = new Jackson2ObjectMapperBuilder()
             .dateFormat(new StdDateFormat())
             .featuresToDisable(

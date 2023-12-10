@@ -23,7 +23,7 @@ import static org.springframework.boot.logging.LogLevel.INFO;
 
 @KafkaIntegrationTest
 @ExtendWith(OutputCaptureExtension.class)
-class OrderProcessedListenerTest {
+class OrderProcessedListenerIntegrationTest {
 
     @Autowired
     private StreamBridge streamBridge;
