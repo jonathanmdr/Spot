@@ -1,12 +1,18 @@
+# SERVER CONFIGURATION
 server:
   port: 8080
   servlet:
     context-path: /spot
 
+# SPRING CONFIGURATION
 spring:
+
+# VIRTUAL THREADS CONFIGURATION
   threads:
     virtual:
       enabled: true
+
+# SPRING CLOUD CONFIGURATION
   cloud:
     function:
       definition: orderCreatedListener;orderProcessedListener
@@ -14,17 +20,20 @@ spring:
       bindings:
         orderCreatedProducer-out-0:
           destination: order-created
+          binder: kafka-one
         orderCreatedListener-in-0:
           destination: order-created
           group: spot
+          binder: kafka-one
         orderCreatedListener-out-0:
           destination: order-processed
+          binder: kafka-two
         orderProcessedListener-in-0:
           destination: order-processed
           group: spot
+          binder: kafka-two
       kafka:
         binder:
-          brokers: localhost:9092
           auto-create-topics: true
         bindings:
           orderCreatedListener-in-0:
@@ -39,3 +48,22 @@ spring:
               dlqName: order-processed-dlq
               autoCommitOnError: true
               autoCommitOffset: true
+      binders:
+        kafka-one:
+          type: kafka
+          environment:
+            spring:
+              cloud:
+                stream:
+                  kafka:
+                    binder:
+                      brokers: localhost:9092
+        kafka-two:
+          type: kafka
+          environment:
+            spring:
+              cloud:
+                stream:
+                  kafka:
+                    binder:
+                      brokers: localhost:9093

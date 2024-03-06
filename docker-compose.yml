@@ -1,65 +1,115 @@
-version: "3.7"
+version: "3.9"
 
 services:
-  spot.zookeeper:
+
+  spot.zookeeper.one:
     image: docker.io/bitnami/zookeeper:3.7
-    container_name: spot.zookeeper
+    container_name: spot.zookeeper.one
     restart: "no"
-    hostname: spot.zookeeper
+    hostname: spot.zookeeper.one
     ports:
       - "2282:2181"
     environment:
       ALLOW_ANONYMOUS_LOGIN: "yes"
     networks:
-      - spot-network
+      - spot-network-one
     volumes:
-      - zookeeper_data:/bitnami
+      - zookeeper_data_one:/bitnami
 
-  spot.broker:
+  spot.broker.one:
     image: docker.io/bitnami/kafka:3
-    container_name: spot.broker
-    hostname: spot.broker
+    container_name: spot.broker.one
+    hostname: spot.broker.one
     restart: "no"
     ports:
       - "9092:9092"
     environment:
       KAFKA_CFG_LISTENERS: "LISTENER_DOCKER_INTERNAL://:19092,LISTENER_DOCKER_EXTERNAL://:9092"
-      KAFKA_CFG_ADVERTISED_LISTENERS: "LISTENER_DOCKER_INTERNAL://spot.broker:19092,LISTENER_DOCKER_EXTERNAL://localhost:9092"
+      KAFKA_CFG_ADVERTISED_LISTENERS: "LISTENER_DOCKER_INTERNAL://spot.broker.one:19092,LISTENER_DOCKER_EXTERNAL://localhost:9092"
       KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: "LISTENER_DOCKER_INTERNAL:PLAINTEXT,LISTENER_DOCKER_EXTERNAL:PLAINTEXT"
-      KAFKA_CFG_ZOOKEEPER_CONNECT: "spot.zookeeper:2181"
+      KAFKA_CFG_ZOOKEEPER_CONNECT: "spot.zookeeper.one:2181"
       KAFKA_CFG_OFFSETS_TOPIC_REPLICATION_FACTOR: "1"
       KAFKA_CFG_PORT: "9092"
       KAFKA_INTER_BROKER_LISTENER_NAME: "LISTENER_DOCKER_INTERNAL"
       ALLOW_PLAINTEXT_LISTENER: "yes"
     depends_on:
-      - spot.zookeeper
+      - spot.zookeeper.one
     networks:
-      - spot-network
+      - spot-network-one
     volumes:
-      - kafka_data:/bitnami
+      - kafka_data_one:/bitnami
+
+  spot.zookeeper.two:
+    image: docker.io/bitnami/zookeeper:3.7
+    container_name: spot.zookeeper.two
+    restart: "no"
+    hostname: spot.zookeeper.two
+    ports:
+      - "2283:2181"
+    environment:
+      ALLOW_ANONYMOUS_LOGIN: "yes"
+    networks:
+      - spot-network-two
+    volumes:
+      - zookeeper_data_two:/bitnami
+
+  spot.broker.two:
+    image: docker.io/bitnami/kafka:3
+    container_name: spot.broker.two
+    hostname: spot.broker.two
+    restart: "no"
+    ports:
+      - "9093:9092"
+    environment:
+      KAFKA_CFG_LISTENERS: "LISTENER_DOCKER_INTERNAL://:19092,LISTENER_DOCKER_EXTERNAL://:9092"
+      KAFKA_CFG_ADVERTISED_LISTENERS: "LISTENER_DOCKER_INTERNAL://spot.broker.two:19092,LISTENER_DOCKER_EXTERNAL://localhost:9092"
+      KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: "LISTENER_DOCKER_INTERNAL:PLAINTEXT,LISTENER_DOCKER_EXTERNAL:PLAINTEXT"
+      KAFKA_CFG_ZOOKEEPER_CONNECT: "spot.zookeeper.two:2181"
+      KAFKA_CFG_OFFSETS_TOPIC_REPLICATION_FACTOR: "1"
+      KAFKA_CFG_PORT: "9092"
+      KAFKA_INTER_BROKER_LISTENER_NAME: "LISTENER_DOCKER_INTERNAL"
+      ALLOW_PLAINTEXT_LISTENER: "yes"
+    depends_on:
+      - spot.zookeeper.two
+    networks:
+      - spot-network-two
+    volumes:
+      - kafka_data_two:/bitnami
 
   spot.kafka-ui:
     image: provectuslabs/kafka-ui:latest
     container_name: spot.kafka-ui
     restart: "no"
     environment:
-      KAFKA_CLUSTERS_0_NAME: spot
-      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: spot.broker:19092
-      KAFKA_CLUSTERS_0_ZOOKEEPER: spot.zookeeper:2181
+      KAFKA_CLUSTERS_0_NAME: spot-one
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: spot.broker.one:19092
+      KAFKA_CLUSTERS_0_ZOOKEEPER: spot.zookeeper.one:2181
+      KAFKA_CLUSTERS_1_NAME: spot-two
+      KAFKA_CLUSTERS_1_BOOTSTRAPSERVERS: spot.broker.two:19092
+      KAFKA_CLUSTERS_1_ZOOKEEPER: spot.zookeeper.two:2181
     ports:
       - "8580:8080"
     depends_on:
-      - spot.zookeeper
-      - spot.broker
+      - spot.zookeeper.one
+      - spot.broker.one
+      - spot.zookeeper.two
+      - spot.broker.two
     networks:
-      - spot-network
+      - spot-network-one
+      - spot-network-two
 
 networks:
-  spot-network:
+  spot-network-one:
+    driver: bridge
+  spot-network-two:
     driver: bridge
 
 volumes:
-  zookeeper_data:
+  zookeeper_data_one:
     driver: local
-  kafka_data:
+  kafka_data_one:
+    driver: local
+  zookeeper_data_two:
+    driver: local
+  kafka_data_two:
     driver: local
