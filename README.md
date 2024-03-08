@@ -10,17 +10,30 @@ This example uses the message broker Kafka.
 ---
 
 #### For the up environment:
+> With docker-compose
 ```shell
 # This command runs: Kafka Broker, Zookeeper and Kafka UI
 docker-compose up -d
+```
+> With Make
+```shell
+# This command runs: Kafka Broker, Zookeeper and Kafka UI
+make up
 ```
 
 For access the Kafka UI [click here](http://localhost:8085).
 
 #### For the down environment:
+> With docker-compose
 ```shell
 # This command down all environment and remove all unused files, folders and configurations
 docker-compose down --remove-orphans --volumes
+```
+
+> With Make
+```shell
+# This command down all environment and remove all unused files, folders and configurations
+make down
 ```
 
 # API
