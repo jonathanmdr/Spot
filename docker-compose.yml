@@ -2,7 +2,6 @@ version: "3.9"
 
 services:
 
-# BROKER KAFKA ONE - START
   spot.zookeeper.one:
     image: docker.io/bitnami/zookeeper:3.7
     container_name: spot.zookeeper.one
@@ -39,11 +38,7 @@ services:
       - spot-network-one
     volumes:
       - kafka_data_one:/bitnami
-# BROKER KAFKA ONE - END
 
-
-
-# BROKER KAFKA TWO - START
   spot.zookeeper.two:
     image: docker.io/bitnami/zookeeper:3.7
     container_name: spot.zookeeper.two
@@ -64,14 +59,14 @@ services:
     hostname: spot.broker.two
     restart: "no"
     ports:
-      - "9093:9092"
+      - "9093:9093"
     environment:
-      KAFKA_CFG_LISTENERS: "LISTENER_DOCKER_INTERNAL://:19092,LISTENER_DOCKER_EXTERNAL://:9092"
-      KAFKA_CFG_ADVERTISED_LISTENERS: "LISTENER_DOCKER_INTERNAL://spot.broker.two:19092,LISTENER_DOCKER_EXTERNAL://localhost:9092"
+      KAFKA_CFG_LISTENERS: "LISTENER_DOCKER_INTERNAL://:19093,LISTENER_DOCKER_EXTERNAL://:9093"
+      KAFKA_CFG_ADVERTISED_LISTENERS: "LISTENER_DOCKER_INTERNAL://spot.broker.two:19093,LISTENER_DOCKER_EXTERNAL://localhost:9093"
       KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: "LISTENER_DOCKER_INTERNAL:PLAINTEXT,LISTENER_DOCKER_EXTERNAL:PLAINTEXT"
       KAFKA_CFG_ZOOKEEPER_CONNECT: "spot.zookeeper.two:2181"
       KAFKA_CFG_OFFSETS_TOPIC_REPLICATION_FACTOR: "1"
-      KAFKA_CFG_PORT: "9092"
+      KAFKA_CFG_PORT: "9093"
       KAFKA_INTER_BROKER_LISTENER_NAME: "LISTENER_DOCKER_INTERNAL"
       ALLOW_PLAINTEXT_LISTENER: "yes"
     depends_on:
@@ -80,24 +75,17 @@ services:
       - spot-network-two
     volumes:
       - kafka_data_two:/bitnami
-# BROKER KAFKA TWO - END
 
-
-
-# KAFKA UI
   spot.kafka-ui:
     image: provectuslabs/kafka-ui:latest
     container_name: spot.kafka-ui
     restart: "no"
     environment:
-      # BROKER KAFKA ONE
       KAFKA_CLUSTERS_0_NAME: spot-one
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: spot.broker.one:19092
       KAFKA_CLUSTERS_0_ZOOKEEPER: spot.zookeeper.one:2181
-
-      # BROKER KAFKA TWO
       KAFKA_CLUSTERS_1_NAME: spot-two
-      KAFKA_CLUSTERS_1_BOOTSTRAPSERVERS: spot.broker.two:19092
+      KAFKA_CLUSTERS_1_BOOTSTRAPSERVERS: spot.broker.two:19093
       KAFKA_CLUSTERS_1_ZOOKEEPER: spot.zookeeper.two:2181
     ports:
       - "8580:8080"
@@ -111,11 +99,8 @@ services:
       - spot-network-two
 
 networks:
-  # NETWORK BROKER KAFKA ONE
   spot-network-one:
     driver: bridge
-
-  # NETWORK BROKER KAFKA TWO
   spot-network-two:
     driver: bridge
 

@@ -45,6 +45,16 @@ make down
 > 
 > The order with a value greater than to 500.00 is invalid and returns `REJECTED`.
 ```shell
+# Valid Order
+curl --location --request POST 'http://localhost:8080/spot/orders' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "customer_id": "36a8ea26-4eb0-4b9d-b609-d095175a2f7b",
+    "value": 500.00
+}'
+```
+```shell
+# Invalid Order
 curl --location --request POST 'http://localhost:8080/spot/orders' \
 --header 'Content-Type: application/json' \
 --data-raw '{
