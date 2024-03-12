@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.core.annotation.AliasFor;
 import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.test.context.EmbeddedKafka;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.lang.annotation.ElementType;
@@ -24,7 +23,6 @@ import java.lang.annotation.Target;
 @SpringBootTest
 @EmbeddedKafka
 @Import(TestChannelBinderConfiguration.class)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 public @interface KafkaIntegrationTest {
 
     @AliasFor(annotation = SpringBootTest.class, attribute = "classes")

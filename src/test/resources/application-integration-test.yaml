@@ -3,5 +3,21 @@ spring:
     stream:
       kafka:
         binder:
-          brokers: localhost:9092
           auto-create-topics: true
+      binders:
+        kafka-one:
+          environment:
+            spring:
+              cloud:
+                stream:
+                  kafka:
+                    binder:
+                      brokers: localhost:9092
+        kafka-two:
+          environment:
+            spring:
+              cloud:
+                stream:
+                  kafka:
+                    binder:
+                      brokers: localhost:9093
