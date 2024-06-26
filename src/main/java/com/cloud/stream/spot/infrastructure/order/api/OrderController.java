@@ -1,19 +1,19 @@
 package com.cloud.stream.spot.infrastructure.order.api;
 
-import com.cloud.stream.spot.application.usecase.order.create.CreateNewOrderUseCase;
 import com.cloud.stream.spot.application.usecase.order.create.CreateNewOrderCommand;
+import com.cloud.stream.spot.application.usecase.order.create.CreateNewOrderUseCase;
 import com.cloud.stream.spot.infrastructure.order.api.in.OrderInput;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestBody;
 
-import static org.springframework.http.HttpStatus.ACCEPTED;
+import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
-@RequestMapping(path = "/orders", consumes = APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/v1/orders", consumes = APPLICATION_JSON_VALUE)
 public class OrderController {
 
     private final CreateNewOrderUseCase useCase;
@@ -23,7 +23,7 @@ public class OrderController {
     }
 
     @PostMapping
-    @ResponseStatus(ACCEPTED)
+    @ResponseStatus(NO_CONTENT)
     public void create(@RequestBody final OrderInput input) {
         final CreateNewOrderCommand command = new CreateNewOrderCommand(
             input.customerId(),

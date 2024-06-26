@@ -2,11 +2,7 @@ package com.cloud.stream.spot;
 
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.cloud.stream.binder.test.TestChannelBinderConfiguration;
-import org.springframework.context.annotation.Import;
 import org.springframework.core.annotation.AliasFor;
-import org.springframework.kafka.annotation.EnableKafka;
-import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.lang.annotation.ElementType;
@@ -20,19 +16,9 @@ import java.lang.annotation.Target;
 @Inherited
 @ActiveProfiles("integration-test")
 @SpringBootTest(
-    webEnvironment = WebEnvironment.NONE
+     webEnvironment = WebEnvironment.NONE
 )
-@EnableKafka
-@EmbeddedKafka(
-    brokerProperties = {
-        "listeners=PLAINTEXT://localhost:9092",
-        "port=9092"
-    },
-    controlledShutdown = true,
-    kraft = true
-)
-@Import(TestChannelBinderConfiguration.class)
-public @interface KafkaIntegrationTest {
+public @interface IntegrationTest {
 
     @AliasFor(annotation = SpringBootTest.class, attribute = "classes")
     Class<?>[] classes() default {};

@@ -15,7 +15,17 @@ public class OrderProcessedListener implements Consumer<OrderProcessedEvent> {
 
     @Override
     public void accept(final OrderProcessedEvent event) {
-        logger.info(Json.writeValueAsString(event));
+        try {
+            // Force delay to simulate processing
+            Thread.sleep(1500);
+
+            final var jsonEvent = Json.writeValueAsString(event);
+
+            logger.info(jsonEvent);
+        } catch (final InterruptedException ex) {
+            logger.error("Error while processing order", ex);
+            Thread.currentThread().interrupt();
+        }
     }
 
 }

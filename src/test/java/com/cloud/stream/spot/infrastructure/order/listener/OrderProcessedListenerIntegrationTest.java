@@ -13,10 +13,13 @@ import org.springframework.boot.test.system.OutputCaptureExtension;
 import org.springframework.cloud.stream.function.StreamBridge;
 
 import java.math.BigDecimal;
+import java.time.Duration;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.concurrent.Callable;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.awaitility.Awaitility.await;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.verify;
 import static org.springframework.boot.logging.LogLevel.INFO;
@@ -51,8 +54,19 @@ class OrderProcessedListenerIntegrationTest {
 
         final var jsonEvent = Json.writeValueAsString(orderProcessedEvent);
 
-        assertThat(output.getOut())
-            .contains(INFO.name(), jsonEvent);
+        // Using Runnable
+        await()
+            .atMost(Duration.ofSeconds(2))
+            .untilAsserted(() -> assertThat(output.getOut()).contains(INFO.name(), jsonEvent));
+
+        // Using Callable
+        await()
+            .atMost(Duration.ofSeconds(2))
+            .until(contains(output, jsonEvent));
+    }
+
+    private Callable<Boolean> contains(final CapturedOutput output, final String message) {
+        return () -> output.getOut().contains(message);
     }
 
 }

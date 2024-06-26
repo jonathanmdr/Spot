@@ -1,38 +1,28 @@
-version: "3.7"
+version: "3.9"
 
 services:
-  spot.zookeeper:
-    image: docker.io/bitnami/zookeeper:3.7
-    container_name: spot.zookeeper
-    restart: "no"
-    hostname: spot.zookeeper
-    ports:
-      - "2282:2181"
-    environment:
-      ALLOW_ANONYMOUS_LOGIN: "yes"
-    networks:
-      - spot-network
-    volumes:
-      - zookeeper_data:/bitnami
 
   spot.broker:
-    image: docker.io/bitnami/kafka:3
+    image: docker.io/bitnami/kafka:3.7
     container_name: spot.broker
     hostname: spot.broker
     restart: "no"
     ports:
       - "9092:9092"
     environment:
-      KAFKA_CFG_LISTENERS: "LISTENER_DOCKER_INTERNAL://:19092,LISTENER_DOCKER_EXTERNAL://:9092"
+      KAFKA_CFG_NODE_ID: 0
+      KAFKA_CFG_PROCESS_ROLES: controller,broker
+      KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: 0@spot.broker:19192
+      KAFKA_CFG_LISTENERS: "LISTENER_DOCKER_INTERNAL://:19092,CONTROLLER://:19192,LISTENER_DOCKER_EXTERNAL://:9092"
       KAFKA_CFG_ADVERTISED_LISTENERS: "LISTENER_DOCKER_INTERNAL://spot.broker:19092,LISTENER_DOCKER_EXTERNAL://localhost:9092"
-      KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: "LISTENER_DOCKER_INTERNAL:PLAINTEXT,LISTENER_DOCKER_EXTERNAL:PLAINTEXT"
-      KAFKA_CFG_ZOOKEEPER_CONNECT: "spot.zookeeper:2181"
+      KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: "LISTENER_DOCKER_INTERNAL:PLAINTEXT,CONTROLLER:PLAINTEXT,LISTENER_DOCKER_EXTERNAL:PLAINTEXT"
+      KAFKA_CFG_INTER_BROKER_LISTENER_NAME: "LISTENER_DOCKER_INTERNAL"
+      KAFKA_CFG_SASL_MECHANISM_INTER_BROKER_PROTOCOL: "PLAIN"
+      KAFKA_CFG_CONTROLLER_LISTENER_NAMES: "CONTROLLER"
+      KAFKA_CFG_SASL_MECHANISM_CONTROLLER_PROTOCOL: "PLAIN"
       KAFKA_CFG_OFFSETS_TOPIC_REPLICATION_FACTOR: "1"
-      KAFKA_CFG_PORT: "9092"
-      KAFKA_INTER_BROKER_LISTENER_NAME: "LISTENER_DOCKER_INTERNAL"
-      ALLOW_PLAINTEXT_LISTENER: "yes"
-    depends_on:
-      - spot.zookeeper
+      KAFKA_INTER_BROKER_USER: admin
+      KAFKA_INTER_BROKER_PASSWORD: admin
     networks:
       - spot-network
     volumes:
@@ -45,11 +35,9 @@ services:
     environment:
       KAFKA_CLUSTERS_0_NAME: spot
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: spot.broker:19092
-      KAFKA_CLUSTERS_0_ZOOKEEPER: spot.zookeeper:2181
     ports:
       - "8580:8080"
     depends_on:
-      - spot.zookeeper
       - spot.broker
     networks:
       - spot-network
@@ -59,7 +47,5 @@ networks:
     driver: bridge
 
 volumes:
-  zookeeper_data:
-    driver: local
   kafka_data:
     driver: local

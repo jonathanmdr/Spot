@@ -5,7 +5,7 @@ import com.cloud.stream.spot.domain.OrderGateway;
 import com.cloud.stream.spot.domain.order.Order;
 import com.cloud.stream.spot.domain.order.OrderStatus;
 import com.cloud.stream.spot.infrastructure.configuration.json.Json;
-import com.cloud.stream.spot.infrastructure.order.event.OrderCreatedEvent;
+import com.cloud.stream.spot.infrastructure.order.event.OrderProcessedEvent;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.binder.test.OutputDestination;
@@ -26,20 +26,20 @@ class OrderMessageBrokerGatewayIntegrationTest {
     private OutputDestination outputDestination;
 
     @Test
-    void givenAnOrder_whenCallsCreate_thenPublishOrderCreatedEvent() {
+    void givenAnOrder_whenCallsCreate_thenProcessOrderCreatedEvent() {
         final var order = Order.createNewOrderWith(UUID.randomUUID(), BigDecimal.TEN);
         this.orderGateway.create(order);
 
         final var actual = this.outputDestination.receive(Duration.ofSeconds(1).toMillis(), "order-processed");
 
-        final var expected = new OrderCreatedEvent(
+        final var expected = new OrderProcessedEvent(
             order.getOrderId(),
             order.getCustomerId(),
             order.getValue(),
             OrderStatus.APPROVED
         );
 
-        assertThat(Json.readValue(actual.getPayload(), OrderCreatedEvent.class)).isEqualTo(expected);
+        assertThat(Json.readValue(actual.getPayload(), OrderProcessedEvent.class)).isEqualTo(expected);
     }
 
 }
