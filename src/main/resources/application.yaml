@@ -4,6 +4,9 @@ server:
     context-path: /spot
 
 spring:
+  application:
+    name: ${name}
+    version: ${version}
   threads:
     virtual:
       enabled: true

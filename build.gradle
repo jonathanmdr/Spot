@@ -43,3 +43,12 @@ dependencyManagement {
 tasks.named("test") {
     useJUnitPlatform()
 }
+
+tasks.processResources {
+    filesMatching("**/application.yaml") {
+        expand(
+            name: rootProject.name,
+            version: rootProject.version
+        )
+    }
+}
