@@ -1,6 +1,7 @@
 package com.cloud.stream.spot.infrastructure.order.gateway;
 
 import com.cloud.stream.spot.domain.OrderGateway;
+import com.cloud.stream.spot.domain.exception.DomainException;
 import com.cloud.stream.spot.domain.order.Order;
 import com.cloud.stream.spot.infrastructure.configuration.stream.producer.StreamProducer;
 import com.cloud.stream.spot.infrastructure.order.event.OrderCreatedEvent;
@@ -26,7 +27,11 @@ public class OrderMessageBrokerGateway implements OrderGateway {
             order.getStatus()
         );
 
-        this.producer.send(ORDER_CREATED.channel(), event);
+        final boolean hasSent = this.producer.send(ORDER_CREATED.channel(), event);
+
+        if (!hasSent) {
+            throw new DomainException("Failed to send order created event");
+        }
     }
 
 }

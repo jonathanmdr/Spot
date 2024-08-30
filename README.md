@@ -18,7 +18,11 @@ docker-compose up -d
 make up
 ```
 
-For access the Kafka UI [click here](http://localhost:8085).
+- For access the Kafka UI [click here](http://localhost:8580).
+- For access the Open API UI [click here](http://localhost:8080).
+- For access the Open API Docs [click here](http://localhost:8080/sync-api-docs).
+- For access the Async API UI [click here](http://localhost:8080/springwolf/asyncapi-ui.html).
+- For access the Async API Docs [click here](http://localhost:8080/async-api-docs).
 
 #### For the down environment:
 ```shell
@@ -38,7 +42,7 @@ make down
 > 
 > The order with a value greater than to 500.00 is invalid and returns `REJECTED`.
 ```shell
-curl --location --request POST 'http://localhost:8080/spot/v1/orders' \
+curl --location --request POST 'http://localhost:8080/v1/orders' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "customer_id": "36a8ea26-4eb0-4b9d-b609-d095175a2f7b",

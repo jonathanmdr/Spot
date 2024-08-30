@@ -18,6 +18,8 @@ repositories {
 
 ext {
     set("springCloudVersion", "2023.0.1")
+    set("springWolfVersion", "1.5.0")
+    set("springDocVersion", "2.5.0")
 }
 
 dependencies {
@@ -28,7 +30,16 @@ dependencies {
         exclude module: "spring-boot-starter-tomcat"
     }
     implementation("org.springframework.boot:spring-boot-starter-undertow")
-    implementation("com.fasterxml.jackson.module:jackson-module-afterburner")
+
+    // ASYNC API
+    implementation("io.github.springwolf:springwolf-kafka:${springWolfVersion}")
+    runtimeOnly("io.github.springwolf:springwolf-ui:${springWolfVersion}")
+    runtimeOnly("io.github.springwolf:springwolf-cloud-stream:${springWolfVersion}")
+    annotationProcessor("io.github.springwolf:springwolf-cloud-stream:${springWolfVersion}")
+
+    // OPEN API
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:${springDocVersion}")
+
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.cloud:spring-cloud-stream-test-binder")
     testImplementation("org.springframework.kafka:spring-kafka-test")

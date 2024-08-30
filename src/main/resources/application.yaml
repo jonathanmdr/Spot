@@ -1,7 +1,5 @@
 server:
   port: 8080
-  servlet:
-    context-path: /spot
 
 spring:
   application:
@@ -42,3 +40,36 @@ spring:
               dlqName: order-processed-dlq
               autoCommitOnError: true
               autoCommitOffset: true
+
+# OPEN API CONFIGURATION
+springdoc:
+  api-docs:
+    path: /sync-api-docs
+    resolve-schema-properties: true
+  override-with-generic-response: false
+  paths-to-exclude: /**/api-docs,/swagger-resources/**,/springwolf/**,/async**
+  swagger-ui:
+    path: /
+
+# ASYNC API CONFIGURATION
+springwolf:
+  enabled: true
+  use-fqn: false
+  plugin:
+    kafka:
+      publishing:
+        enabled: true
+  paths:
+    docs: /async-api-docs
+    # Default path: /springwolf/asyncapi-ui.html
+    ui: /async-api
+  docket:
+    base-package: com.cloud.stream.spot
+    default-content-type: application/json
+    info:
+      title: ${name}
+      version: ${version}
+    servers:
+      kafka-server:
+        host: localhost:9092
+        protocol: kafka

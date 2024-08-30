@@ -8,7 +8,6 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.util.StdDateFormat;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.fasterxml.jackson.module.afterburner.AfterburnerModule;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 
 import java.util.concurrent.Callable;
@@ -37,16 +36,9 @@ public enum Json {
             DeserializationFeature.FAIL_ON_NULL_CREATOR_PROPERTIES,
             SerializationFeature.WRITE_DATES_AS_TIMESTAMPS
         )
-        .modules(new JavaTimeModule(), new Jdk8Module(), afterburnerModule())
+        .modules(new JavaTimeModule(), new Jdk8Module())
         .propertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
         .build();
-
-    private AfterburnerModule afterburnerModule() {
-        var module = new AfterburnerModule();
-        module.setUseValueClassLoader(false);
-        module.setUseOptimizedBeanDeserializer(true);
-        return module;
-    }
 
     private static <T> T invoke(final Callable<T> callable) {
         try {
