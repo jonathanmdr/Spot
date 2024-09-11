@@ -31,6 +31,10 @@ spring:
         orderProcessedListener-in-0:
           destination: order-processed
           group: spot
+          binder: kafka-one
+        orderProcessedListener-in-1:
+          destination: order-processed
+          group: spot
           binder: kafka-two
       kafka:
         binder:
@@ -48,6 +52,12 @@ spring:
               autoCommitOnError: true
               autoCommitOffset: true
           orderProcessedListener-in-0:
+            consumer:
+              enableDlq: true
+              dlqName: order-processed-dlq
+              autoCommitOnError: true
+              autoCommitOffset: true
+          orderProcessedListener-in-1:
             consumer:
               enableDlq: true
               dlqName: order-processed-dlq

@@ -15,7 +15,8 @@ public class OrderProcessedListener implements Consumer<OrderProcessedEvent> {
 
     @Override
     public void accept(final OrderProcessedEvent event) {
-        logger.info(Json.writeValueAsString(event));
+        final var jsonEvent = Json.writeValueAsString(event);
+        logger.info(jsonEvent);
     }
 
 }
