@@ -42,11 +42,6 @@ spring:
       kafka:
         binder:
           auto-create-topics: true
-          configuration:
-            security:
-              protocol: SASL_PLAINTEXT
-            sasl:
-              mechanism: PLAIN
         bindings:
           orderCreatedListener-in-0:
             consumer:
@@ -77,10 +72,6 @@ spring:
                   kafka:
                     binder:
                       brokers: localhost:9092
-                      configuration:
-                        sasl:
-                          jaas:
-                            config: "org.apache.kafka.common.security.plain.PlainLoginModule required username=\"spot\" password=\"spot\";"
         kafka-new:
           type: kafka
           environment:
@@ -91,6 +82,9 @@ spring:
                     binder:
                       brokers: localhost:9093
                       configuration:
+                        security:
+                          protocol: SASL_PLAINTEXT
                         sasl:
+                          mechanism: PLAIN
                           jaas:
                             config: "org.apache.kafka.common.security.plain.PlainLoginModule required username=\"spot\" password=\"spot\";"
