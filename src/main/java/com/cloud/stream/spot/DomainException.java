@@ -1,4 +1,4 @@
-package com.cloud.stream.spot.domain.exception;
+package com.cloud.stream.spot;
 
 public class DomainException extends RuntimeException {
 
@@ -7,6 +7,10 @@ public class DomainException extends RuntimeException {
 
     public DomainException(final String message) {
         super(message, null, ENABLE_SUPPRESSION, WRITEABLE_STACKTRACE);
+    }
+
+    public DomainException(final Exception ex) {
+        super(ex.getMessage(), ex, ENABLE_SUPPRESSION, WRITEABLE_STACKTRACE);
     }
 
 }

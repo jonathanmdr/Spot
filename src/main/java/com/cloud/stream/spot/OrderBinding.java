@@ -1,4 +1,4 @@
-package com.cloud.stream.spot.infrastructure.configuration.stream.bindings;
+package com.cloud.stream.spot;
 
 public enum OrderBinding {
 

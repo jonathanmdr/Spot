@@ -1,6 +1,4 @@
-package com.cloud.stream.spot.domain.order;
-
-import com.cloud.stream.spot.domain.exception.DomainException;
+package com.cloud.stream.spot;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -49,12 +47,16 @@ public class Order {
         );
     }
 
-    public boolean isValid() {
+    public Order process() {
+        return isValid() ? approve() : reject();
+    }
+
+    private boolean isValid() {
         final BigDecimal maxValueAccepted = BigDecimal.valueOf(500);
         return maxValueAccepted.compareTo(this.value) >= 0;
     }
 
-    public Order approve() {
+    private Order approve() {
         return new Order(
             this.orderId,
             this.customerId,
@@ -63,7 +65,7 @@ public class Order {
         );
     }
 
-    public Order reject() {
+    private Order reject() {
         return new Order(
             this.orderId,
             this.customerId,
@@ -86,6 +88,12 @@ public class Order {
 
     public OrderStatus getStatus() {
         return status;
+    }
+
+    public enum OrderStatus {
+        CREATED,
+        APPROVED,
+        REJECTED
     }
 
 }
