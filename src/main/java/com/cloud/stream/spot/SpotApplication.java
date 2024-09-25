@@ -21,12 +21,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 import reactor.util.function.Tuple2;
-import reactor.util.function.Tuples;
 
 import java.math.BigDecimal;
 import java.util.Base64;
-import java.util.Random;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -43,40 +42,29 @@ public class SpotApplication {
     }
 
     @Bean
-    public Function<Tuple2<Flux<OrderCreatedEvent>, Flux<OrderCreatedEvent>>, Tuple2<Flux<OrderProcessedEvent>, Flux<OrderProcessedEvent>>> orderCreatedListener() {
-        return tuple -> {
-            final var orderProcessedEventFlux = tuple.getT1().mergeWith(tuple.getT2())
-                .map(orderCreatedEvent -> {
-                    final var order = Order.buildOrderWith(
-                        orderCreatedEvent.orderId(),
-                        orderCreatedEvent.customerId(),
-                        orderCreatedEvent.value(),
-                        orderCreatedEvent.status()
-                    ).process();
-                    return new OrderProcessedEvent(
-                        order.getOrderId(),
-                        order.getCustomerId(),
-                        order.getValue(),
-                        order.getStatus()
-                    );
-                });
-            return Tuples.of(orderProcessedEventFlux, orderProcessedEventFlux);
-        };
+    public Function<Tuple2<Flux<OrderCreatedEvent>, Flux<OrderCreatedEvent>>, Flux<OrderProcessedEvent>> orderCreatedListener() {
+        return tuple -> tuple.getT1().mergeWith(tuple.getT2())
+            .map(orderCreatedEvent -> {
+                final var order = Order.buildOrderWith(
+                    orderCreatedEvent.orderId(),
+                    orderCreatedEvent.customerId(),
+                    orderCreatedEvent.value(),
+                    orderCreatedEvent.status()
+                ).process();
+                return new OrderProcessedEvent(
+                    order.getOrderId(),
+                    order.getCustomerId(),
+                    order.getValue(),
+                    order.getStatus()
+                );
+            });
     }
 
     @Bean
-    public Consumer<OrderProcessedEvent> orderProcessedListenerLegacy() {
+    public Consumer<OrderProcessedEvent> orderProcessedListener() {
         return orderProcessedEvent -> {
             final var jsonEvent = Json.writeValueAsString(orderProcessedEvent);
-            log.info("Order processed from cluster legacy: {}", jsonEvent);
-        };
-    }
-
-    @Bean
-    public Consumer<OrderProcessedEvent> orderProcessedListenerNew() {
-        return orderProcessedEvent -> {
-            final var jsonEvent = Json.writeValueAsString(orderProcessedEvent);
-            log.info("Order processed from cluster new: {}", jsonEvent);
+            log.info("Order processed: {}", jsonEvent);
         };
     }
 
@@ -107,11 +95,11 @@ public class SpotApplication {
     public static class OrderController {
 
         private final StreamBridge streamBridge;
-        private final Random random;
+        private final AtomicInteger roundRobinIndex;
 
         public OrderController(final StreamBridge streamBridge) {
             this.streamBridge = streamBridge;
-            this.random = new Random();
+            this.roundRobinIndex = new AtomicInteger(0);
         }
 
         @PostMapping
@@ -125,10 +113,10 @@ public class SpotApplication {
                 newOrder.getStatus()
             );
 
-            final var randomBinding = this.random.nextInt(OrderBinding.values().length);
-            final var randomChannel = OrderBinding.values()[randomBinding].channel();
-            log.info("Sending order to channel: {}", randomChannel);
-            this.streamBridge.send(randomChannel, orderCreatedEvent);
+            final var currentBinding = this.roundRobinIndex.getAndUpdate(i -> (i + 1) % OrderBinding.values().length);
+            final var currentChannel = OrderBinding.values()[currentBinding].channel();
+            log.info("Sending order to channel: {}", currentChannel);
+            this.streamBridge.send(currentChannel, orderCreatedEvent);
         }
 
         public record OrderInput(

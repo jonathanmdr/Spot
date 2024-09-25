@@ -15,7 +15,7 @@ spring:
 # SPRING CLOUD CONFIGURATION
   cloud:
     function:
-      definition: orderCreatedListener;orderProcessedListenerLegacy;orderProcessedListenerNew
+      definition: orderCreatedListener;orderProcessedListener
     stream:
       bindings:
         orderCreatedProducer-out-0:
@@ -33,16 +33,9 @@ spring:
           group: spot
           binder: kafka-new
         orderCreatedListener-out-0:
-          destination: order-processed-legacy
-          binder: kafka-legacy
-        orderCreatedListener-out-1:
           destination: order-processed
           binder: kafka-new
-        orderProcessedListenerLegacy-in-0:
-          destination: order-processed-legacy
-          group: spot
-          binder: kafka-legacy
-        orderProcessedListenerNew-in-0:
+        orderProcessedListener-in-0:
           destination: order-processed
           group: spot
           binder: kafka-new
@@ -67,13 +60,7 @@ spring:
               dlqName: order-created-dlt
               autoCommitOnError: true
               autoCommitOffset: true
-          orderProcessedListenerLegacy-in-0:
-            consumer:
-              enableDlq: true
-              dlqName: order-processed-legacy-dlt
-              autoCommitOnError: true
-              autoCommitOffset: true
-          orderProcessedListenerNew-in-0:
+          orderProcessedListener-in-0:
             consumer:
               enableDlq: true
               dlqName: order-processed-dlt
