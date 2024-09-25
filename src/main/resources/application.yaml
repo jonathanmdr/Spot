@@ -15,27 +15,37 @@ spring:
 # SPRING CLOUD CONFIGURATION
   cloud:
     function:
-      definition: orderCreatedListener;orderProcessedListener
+      definition: orderCreatedListener;orderProcessedListenerLegacy;orderProcessedListenerNew
     stream:
       bindings:
         orderCreatedProducer-out-0:
+          destination: order-created-legacy
+          binder: kafka-legacy
+        orderCreatedProducer-out-1:
           destination: order-created
-          binder: kafka-one
+          binder: kafka-new
         orderCreatedListener-in-0:
+          destination: order-created-legacy
+          group: spot
+          binder: kafka-legacy
+        orderCreatedListener-in-1:
           destination: order-created
           group: spot
-          binder: kafka-one
+          binder: kafka-new
         orderCreatedListener-out-0:
+          destination: order-processed-legacy
+          binder: kafka-legacy
+        orderCreatedListener-out-1:
           destination: order-processed
-          binder: kafka-two
-        orderProcessedListener-in-0:
+          binder: kafka-new
+        orderProcessedListenerLegacy-in-0:
+          destination: order-processed-legacy
+          group: spot
+          binder: kafka-legacy
+        orderProcessedListenerNew-in-0:
           destination: order-processed
           group: spot
-          binder: kafka-one
-        orderProcessedListener-in-1:
-          destination: order-processed
-          group: spot
-          binder: kafka-two
+          binder: kafka-new
       kafka:
         binder:
           auto-create-topics: true
@@ -48,23 +58,30 @@ spring:
           orderCreatedListener-in-0:
             consumer:
               enableDlq: true
-              dlqName: order-created-dlq
+              dlqName: order-created-legacy-dlt
               autoCommitOnError: true
               autoCommitOffset: true
-          orderProcessedListener-in-0:
+          orderCreatedListener-in-1:
             consumer:
               enableDlq: true
-              dlqName: order-processed-dlq
+              dlqName: order-created-dlt
               autoCommitOnError: true
               autoCommitOffset: true
-          orderProcessedListener-in-1:
+          orderProcessedListenerLegacy-in-0:
             consumer:
               enableDlq: true
-              dlqName: order-processed-dlq
+              dlqName: order-processed-legacy-dlt
               autoCommitOnError: true
               autoCommitOffset: true
+          orderProcessedListenerNew-in-0:
+            consumer:
+              enableDlq: true
+              dlqName: order-processed-dlt
+              autoCommitOnError: true
+              autoCommitOffset: true
+      default-binder: kafka-new
       binders:
-        kafka-one:
+        kafka-legacy:
           type: kafka
           environment:
             spring:
@@ -77,7 +94,7 @@ spring:
                         sasl:
                           jaas:
                             config: "org.apache.kafka.common.security.plain.PlainLoginModule required username=\"spot\" password=\"spot\";"
-        kafka-two:
+        kafka-new:
           type: kafka
           environment:
             spring:
