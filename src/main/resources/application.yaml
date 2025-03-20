@@ -17,39 +17,11 @@ spring:
     function:
       definition: orderCreatedListener;orderProcessedListener
     stream:
-      bindings:
-        orderCreatedProducer-out-0:
-          destination: order-created-legacy
-          binder: kafka-legacy
-        orderCreatedProducer-out-1:
-          destination: order-created
-          binder: kafka-new
-        orderCreatedListener-in-0:
-          destination: order-created-legacy
-          group: spot
-          binder: kafka-legacy
-        orderCreatedListener-in-1:
-          destination: order-created
-          group: spot
-          binder: kafka-new
-        orderCreatedListener-out-0:
-          destination: order-processed
-          binder: kafka-new
-        orderProcessedListener-in-0:
-          destination: order-processed
-          group: spot
-          binder: kafka-new
       kafka:
         binder:
           auto-create-topics: true
         bindings:
           orderCreatedListener-in-0:
-            consumer:
-              enableDlq: true
-              dlqName: order-created-legacy-dlt
-              autoCommitOnError: true
-              autoCommitOffset: true
-          orderCreatedListener-in-1:
             consumer:
               enableDlq: true
               dlqName: order-created-dlt
@@ -61,9 +33,23 @@ spring:
               dlqName: order-processed-dlt
               autoCommitOnError: true
               autoCommitOffset: true
-      default-binder: kafka-new
+      bindings:
+        orderCreatedProducer-out-0:
+          destination: order-created
+          binder: order-broker
+        orderCreatedListener-in-0:
+          destination: order-created
+          group: spot
+          binder: order-broker
+        orderCreatedListener-out-0:
+          destination: order-processed
+          binder: order-broker
+        orderProcessedListener-in-0:
+          destination: order-processed
+          group: spot
+          binder: order-broker
       binders:
-        kafka-legacy:
+        order-broker:
           type: kafka
           environment:
             spring:
@@ -72,15 +58,6 @@ spring:
                   kafka:
                     binder:
                       brokers: localhost:9092
-        kafka-new:
-          type: kafka
-          environment:
-            spring:
-              cloud:
-                stream:
-                  kafka:
-                    binder:
-                      brokers: localhost:9093
                       configuration:
                         security:
                           protocol: SASL_PLAINTEXT

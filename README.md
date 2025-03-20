@@ -41,9 +41,9 @@ make down
 ---
 
 #### Request example:
-> The order with a value less than or equal to 500.00 is valid and returns `APPROVED`.
+> The order with a value less than or equal to 500.00 is processed normally, the result is printed in the console.
 > 
-> The order with a value greater than to 500.00 is invalid and returns `REJECTED`.
+> The order with a value greater than to 500.00 is invalid and throws an exception and the event is sent to the DLT.
 ```shell
 # Valid Order
 curl --location --request POST 'http://localhost:8080/spot/orders' \

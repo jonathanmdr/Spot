@@ -51,6 +51,10 @@ public class Order {
         return isValid() ? approve() : reject();
     }
 
+    public boolean isRejected() {
+        return OrderStatus.REJECTED == this.status;
+    }
+
     private boolean isValid() {
         final BigDecimal maxValueAccepted = BigDecimal.valueOf(500);
         return maxValueAccepted.compareTo(this.value) >= 0;

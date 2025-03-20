@@ -2,8 +2,7 @@ package com.cloud.stream.spot;
 
 public enum OrderBinding {
 
-    ORDER_CREATED_ONE("orderCreatedProducer-out-0"),
-    ORDER_CREATED_TWO("orderCreatedProducer-out-1");
+    ORDER_CREATED("orderCreatedProducer-out-0");
 
     private final String channel;
 
